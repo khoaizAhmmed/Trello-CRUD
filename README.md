@@ -14,10 +14,6 @@ Implement a list using Trello API. You have to do some CRUD operations with trel
 
 ## Library Used
 - React
-![Screenshot 2022-08-13 001904](https://user-images.githubusercontent.com/60465549/184423686-887071d4-fc57-4551-80d1-5da8716bfa2b.png)
-
-## Library Used
-- React
 
 ## Dependency Used
 - React
