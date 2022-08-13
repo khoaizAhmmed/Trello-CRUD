@@ -16,7 +16,7 @@ Implement a list using Trello API. You have to do some CRUD operations with trel
 - React
 
 ## Dependency Used
-- React
+- React-router-dom@v6
 - Styled-components
 - Iconsax-react
 - Sweetalert2
