@@ -18,7 +18,7 @@ function Dashboard() {
     const { idOrganizations } = me;
     const id = idOrganizations[0];
 
-    const colorArray = ['#845EC2', '#2C73D2', '#0081CF', '#008E9B', '#008F7A'];
+    const colorArray = ['#845EC2', '#2C73D2', '#008E9B', '#008F7A', '#0081CF'];
 
     const createBoard = async (e) => {
         e.preventDefault();
@@ -113,6 +113,8 @@ function Dashboard() {
         console.log('dashboard');
         getBoards();
     }, []);
+
+    console.log('RRRRRRRRRR');
 
     return (
         <div>

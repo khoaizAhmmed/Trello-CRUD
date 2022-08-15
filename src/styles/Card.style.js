@@ -46,10 +46,14 @@ const CardButton = styled.div`
 `;
 const TextCenter = styled.p`
     text-align: center;
-    height: 20px;
+    height: 16px;
     margin: auto;
     color: #4b4453;
     margin: 40px 0px;
+    transition: 0.4s;
+    &:hover {
+        scale: 1.2;
+    }
 `;
 const Gradient = styled.div`
     z-index: 3;
