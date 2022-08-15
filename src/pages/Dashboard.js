@@ -31,14 +31,15 @@ function Dashboard() {
             }
         );
         if (api.status === 200) {
+            const data = await api.json();
+            console.log(data);
+            const newBoard = [...boards, data];
+            setBoards(newBoard);
             setModalOpen(false);
         }
     };
     const UpdateBoard = async (e) => {
         e.preventDefault();
-        console.log(updateBoardId);
-        console.log(inputName);
-        console.log(inputDesc);
         const api = await fetch(
             `https://api.trello.com/1/boards/${updateBoardId}?name=${inputName}&desc=${inputDesc}&key=${authorize.key}&token=${authorize.secret}`,
             {
@@ -46,6 +47,8 @@ function Dashboard() {
             }
         );
         if (api.status === 200) {
+            const data = await api.json();
+            setBoards(boards.map((board) => (board.id === data.id ? { ...data } : board)));
             setUpdateModal(false);
         }
     };
@@ -71,14 +74,18 @@ function Dashboard() {
             confirmButtonText: 'Yes',
         });
         if (accept.isConfirmed) {
-            const deleteBoard = await fetch(
+            const deleteBoardApi = await fetch(
                 `https://api.trello.com/1/boards/${boardId}?key=${authorize.key}&token=${authorize.secret}`,
                 {
                     method: 'DELETE',
                 }
             );
 
-            if (deleteBoard.status === 200) {
+            if (deleteBoardApi.status === 200) {
+                const currentBoard = boards.filter((board) => board.id !== boardId);
+                console.log(currentBoard);
+                setBoards(currentBoard);
+
                 Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
             }
         }
@@ -92,17 +99,18 @@ function Dashboard() {
         setUpdateBoardId(boardId);
     };
 
-    const getBoards = async () => {
-        const api = await fetch(
-            `https://api.trello.com/1/organizations/${id}/boards?key=${authorize.key}&token=${authorize.secret}`
-        );
-        const data = await api.json();
-        setBoards(data);
-    };
-
     useEffect(() => {
+        const getBoards = async () => {
+            const api = await fetch(
+                `https://api.trello.com/1/organizations/${id}/boards?key=${authorize.key}&token=${authorize.secret}`
+            );
+            const data = await api.json();
+            setBoards(data);
+        };
+
+        console.log('dashboard');
         getBoards();
-    }, [boards]);
+    }, []);
 
     return (
         <div>
@@ -137,26 +145,27 @@ function Dashboard() {
             <div>
                 <h3>Boards</h3>
                 <Wrapper>
-                    {boards.map((board) => (
-                        <CardLink key={board.id} to={`/dashboard/${board.id}?name=${board.name}`}>
-                            <Card inputColor="#85BED6">
-                                <CardButton>
-                                    <Edit2
-                                        onClick={(e) => {
-                                            editModal(e, board.id, board.name, board.desc);
-                                        }}
-                                    />
+                    {boards &&
+                        boards.map((board) => (
+                            <CardLink key={board.id} to={`/board/${board.id}?name=${board.name}`}>
+                                <Card inputColor="#85BED6">
+                                    <CardButton>
+                                        <Edit2
+                                            onClick={(e) => {
+                                                editModal(e, board.id, board.name, board.desc);
+                                            }}
+                                        />
 
-                                    <CloseCircle
-                                        onClick={(e) => {
-                                            deleteHandler(e, board.id);
-                                        }}
-                                    />
-                                </CardButton>
-                                <CardTitle>{board.name}</CardTitle>
-                            </Card>
-                        </CardLink>
-                    ))}
+                                        <CloseCircle
+                                            onClick={(e) => {
+                                                deleteHandler(e, board.id);
+                                            }}
+                                        />
+                                    </CardButton>
+                                    <CardTitle>{board.name}</CardTitle>
+                                </Card>
+                            </CardLink>
+                        ))}
                     <Card inputColor="#E0E9E9" onClick={openModalHandler}>
                         <TextCenter>Create new board</TextCenter>
                     </Card>

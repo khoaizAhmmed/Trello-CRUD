@@ -8,17 +8,6 @@ function CardList({ id }) {
     const [addCard, setAddCard] = useState(false);
 
     const authorize = JSON.parse(sessionStorage.getItem('auth'));
-    const getCards = async (CardId) => {
-        const cardsApi = await fetch(
-            `https://api.trello.com/1/lists/${CardId}/cards?key=${authorize.key}&token=${authorize.secret}`
-        );
-        const card = await cardsApi.json();
-        setCards(card);
-    };
-
-    useEffect(() => {
-        getCards(id);
-    }, [cards, getCards, id]);
 
     const addCardHandler = (e) => {
         e.preventDefault();
@@ -43,14 +32,26 @@ function CardList({ id }) {
             }
         );
         if (createCardApi.status === 200) {
+            const newData = await createCardApi.json();
+            const newCards = [...cards, newData];
+            setCards(newCards);
             setAddCard(false);
         }
     };
-
+    useEffect(() => {
+        const getCards = async (CardId) => {
+            const cardsApi = await fetch(
+                `https://api.trello.com/1/lists/${CardId}/cards?key=${authorize.key}&token=${authorize.secret}`
+            );
+            const card = await cardsApi.json();
+            setCards(card);
+        };
+        getCards(id);
+    }, []);
     return (
         <div>
             <CardBox>
-                {cards.map((c) => (
+                {cards?.map((c) => (
                     <CardLi key={c.id}>{c.name}</CardLi>
                 ))}
             </CardBox>

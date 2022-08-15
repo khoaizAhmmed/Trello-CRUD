@@ -15,7 +15,7 @@ export default function Pages({ isLoggedIn }) {
                     element={isLoggedIn ? <Navigate to="/dashboard" /> : <Authorization />}
                 />
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/dashboard/:id" element={<BoardList />} />
+                <Route path="/board/:id" element={<BoardList />} />
                 <Route path="/logout" element={<Logout />} />
             </Routes>
         </>

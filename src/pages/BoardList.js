@@ -28,6 +28,10 @@ function BoardList() {
             }
         );
         if (createListApi.status === 200) {
+            const newData = await createListApi.json();
+            const newList = [...lists, newData];
+            console.log(newList);
+            setList(newList);
             setAddList(false);
         }
     };
@@ -41,17 +45,18 @@ function BoardList() {
         e.preventDefault();
         setAddList(false);
     };
+    const sortList = (a, b) => a.pos - b.pos;
 
     useEffect(() => {
-        const getList = async (id) => {
+        const getList = async () => {
             const listApi = await fetch(
-                `https://api.trello.com/1/boards/${id}/lists?key=${authorize.key}&token=${authorize.secret}`
+                `https://api.trello.com/1/boards/${params.id}/lists?key=${authorize.key}&token=${authorize.secret}`
             );
             const list = await listApi.json();
             setList(list);
         };
-        getList(params.id);
-    }, [lists]);
+        getList();
+    }, []);
 
     return (
         <>
@@ -59,7 +64,7 @@ function BoardList() {
             <br />
             <h3>Lists</h3>
             <ListWarp>
-                {lists.map((li) => (
+                {lists?.map((li) => (
                     <ListBox key={li.id}>
                         <ListTitle>{li.name}</ListTitle>
                         <CardList id={li.id} />
