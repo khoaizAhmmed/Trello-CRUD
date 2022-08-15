@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AddListButton, CardBox, CardLi } from '../styles/CardBox.style';
 import { ExitsButton, InputBox, InputField, SaveButton } from '../styles/Form.style';
 
@@ -6,6 +6,7 @@ function CardList({ id }) {
     const [cards, setCards] = useState([]);
     const [cardName, setCardName] = useState('');
     const [addCard, setAddCard] = useState(false);
+    const cardInput = useRef(null);
 
     const authorize = JSON.parse(sessionStorage.getItem('auth'));
 
@@ -39,6 +40,9 @@ function CardList({ id }) {
         }
     };
     useEffect(() => {
+        cardInput.current && cardInput.current.focus();
+    }, [addCard]);
+    useEffect(() => {
         const getCards = async (CardId) => {
             const cardsApi = await fetch(
                 `https://api.trello.com/1/lists/${CardId}/cards?key=${authorize.key}&token=${authorize.secret}`
@@ -61,6 +65,7 @@ function CardList({ id }) {
             {addCard && (
                 <InputBox>
                     <InputField
+                        ref={cardInput}
                         onChange={(e) => {
                             setCardName(e.target.value);
                         }}

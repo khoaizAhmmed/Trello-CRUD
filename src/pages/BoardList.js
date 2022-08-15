@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CardList from '../components/CardList';
 
@@ -11,6 +11,7 @@ function BoardList() {
     const [addList, setAddList] = useState(false);
     const params = useParams();
     const authorize = JSON.parse(sessionStorage.getItem('auth'));
+    const inputRef = useRef(null);
 
     // Create List Function
     const paramsName = new URL(document.location).searchParams;
@@ -45,8 +46,10 @@ function BoardList() {
         e.preventDefault();
         setAddList(false);
     };
-    const sortList = (a, b) => a.pos - b.pos;
 
+    useEffect(() => {
+        inputRef.current && inputRef.current.focus();
+    }, [addList]);
     useEffect(() => {
         const getList = async () => {
             const listApi = await fetch(
@@ -81,6 +84,7 @@ function BoardList() {
                     {addList && (
                         <InputBox>
                             <InputField
+                                ref={inputRef}
                                 onChange={(e) => {
                                     setListName(e.target.value);
                                 }}
