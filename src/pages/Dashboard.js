@@ -18,6 +18,8 @@ function Dashboard() {
     const { idOrganizations } = me;
     const id = idOrganizations[0];
 
+    const colorArray = ['#845EC2', '#2C73D2', '#0081CF', '#008E9B', '#008F7A'];
+
     const createBoard = async (e) => {
         e.preventDefault();
         const api = await fetch(
@@ -146,9 +148,13 @@ function Dashboard() {
                 <h3>Boards</h3>
                 <Wrapper>
                     {boards &&
-                        boards.map((board) => (
+                        boards.map((board, i) => (
                             <CardLink key={board.id} to={`/board/${board.id}?name=${board.name}`}>
-                                <Card inputColor="#85BED6">
+                                <Card
+                                    inputColor={
+                                        colorArray[Math.floor(Math.random() * colorArray.length)]
+                                    }
+                                >
                                     <CardButton>
                                         <Edit2
                                             onClick={(e) => {

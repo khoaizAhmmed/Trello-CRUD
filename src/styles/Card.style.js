@@ -35,10 +35,12 @@ const CardButton = styled.div`
     svg {
         padding: 0 4px;
         size: 16px;
-        color: '#697689';
-        opacity: 0.7;
+        color: #ffffff;
+        opacity: 0.4;
         &:hover {
             opacity: 1;
+            transition: 0.4s;
+            scale: 1.4;
         }
     }
 `;
